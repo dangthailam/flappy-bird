@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Flappy bird</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <div id="height"></div>
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        var color = '#75BE2F',
+            backgroundColor = '#4EC0CB',
+            canvasW = canvas.clientWidth,
+            canvasH = canvas.clientHeight,
+            lineWidth = 5,
+            capHeight = 10,
+            x = canvasW,
+            y = Math.ceil(Math.random() * 3) / 5;
+
+        var image = new Image(50, 36);
+        image.src = 'images/flappy-bird.png';
+            
+        image.onload = function() {
+            draw(x, y * canvasH);
+        };
+
+        setInterval(function () {
+            document.getElementById('height').innerText = `${y} - ${y * canvasH}`;
+
+            draw(x, y * canvasH);
+            x -= 10;
+            if (x <= 0) {
+                x = canvasW;
+                y = Math.ceil(Math.random() * 3) / 5;
+            }
+        }, 50);
+
+        function draw(x, y) {
+            ctx.fillStyle = backgroundColor;
+            ctx.fillRect(0, 0, canvasW, canvasH);
+            ctx.drawImage(image, 0, canvasH / 2);
+            ctx.fillStyle = color;
+
+            ctx.lineWidth = lineWidth;
+
+            ctx.strokeRect(x, 0, 50, y - capHeight);
+            ctx.fillRect(x, 0, 50, y - capHeight);
+
+            ctx.strokeRect(x - capHeight, y - capHeight, 50 + (capHeight * 2), capHeight);
+            ctx.fillRect(x - capHeight, y - capHeight, 50 + (capHeight * 2), capHeight);
+
+            ctx.strokeRect(x - capHeight, y + (canvasH / 5), 50 + (capHeight * 2), capHeight);
+            ctx.fillRect(x - capHeight, y + (canvasH / 5), 50 + (capHeight * 2), capHeight);
+
+            ctx.strokeRect(x, y + (canvasH / 5) + capHeight, 50, canvasH - y - (canvasH / 5) - capHeight);
+            ctx.fillRect(x, y + (canvasH / 5) + capHeight, 50, canvasH - y - (canvasH / 5) - capHeight);
+        }
+    </script>
+</body>
+
+</html>
